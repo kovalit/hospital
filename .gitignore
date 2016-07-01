@@ -1,0 +1,7 @@
+.idea
+.DS_Store
+/nbproject
+protected/runtime
+public/.sass-cache/
+node_modules/
+yii
