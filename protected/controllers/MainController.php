@@ -4,7 +4,7 @@ class MainController extends BaseController {
 
     
 	public function actionIndex() {
-		$this->redirect($this->createUrl('cards/index'));
+		$this->render("/index");
 	}
 
 	

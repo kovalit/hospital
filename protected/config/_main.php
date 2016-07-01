@@ -51,6 +51,22 @@ return [
 			'class' => 'application.components.FileStorageComponent',
 			'path'  => 'root.public.images.s',
 		],
+            
+                'viewRenderer'  => [
+			'class'         => 'ext.ETwigViewRenderer',
+			'twigPathAlias' => 'ext.twig-renderer.lib.Twig',
+			'fileExtension' => '.twig',
+			'paths'         => [
+				'__main__' => 'application.views',
+			],
+			'functions'     => [
+				'dump' => 'var_dump',
+			],
+			'globals'       => [
+				'Yii' => 'Yii',
+				'Nav' => 'Navigation'
+			],
+		],
 
 		'user' => [
 			'class'          => 'application.components.WebUser',
