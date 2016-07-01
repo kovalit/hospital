@@ -1,0 +1,6 @@
+[submodule "yii"]
+	path = yii
+	url = git://github.com/yiisoft/yii.git
+[submodule "protected/extensions/twig-renderer"]
+	path = protected/extensions/twig-renderer
+	url = git://github.com/fabpot/Twig.git
