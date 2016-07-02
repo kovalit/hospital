@@ -1,21 +1,22 @@
 
 $(function () {
-
-    var eventData = [
-            {"date": "2016-07-04", "badge": false, "title": "Example 1"},
-            {"date": "2016-07-18", "badge": false, "title": "Example 2"}
-    ];
     
-    $("#my-calendar").zabuto_calendar({
-            language: "ru",
-            show_previous: false,
-            data: eventData,
-            show_next: 2
-    });
+   
+
+ 
+    
+
+    
+
     
     $("#BookingForm_specializeId").on('change', function() {
+ 
+        
+        
+        
             var specializeId = $(this).val();
             var hospitals = $("#BookingForm_hospitalId");
+            var doctors = $("#BookingForm_doctorId");
                 $.ajax({
                     type: "GET",
                     url: "/getHospitals/" + specializeId,
@@ -24,6 +25,7 @@ $(function () {
 
                     success: function(result){
                           hospitals.empty();
+                          doctors.parents('.form-row').fadeOut();
                           hospitals.append($("<option></option>").val('').html(result['']));
                             $.each(result, function (key, value) {
                                     if (key !== '') hospitals.append($("<option></option>").val(key).html(value));
@@ -51,6 +53,44 @@ $(function () {
                                     if (key !== '') doctors.append($("<option></option>").val(key).html(value));
                             });
                             doctors.parents('.form-row').fadeIn();
+
+                    }
+                });
+    });
+    
+    
+    $("#BookingForm_doctorId").on('change', function() {
+        
+        
+         
+
+            var hospitalId = $('#BookingForm_hospitalId').val();
+            var doctorId = $(this).val();
+                $.ajax({
+                    type: "GET",
+                    url: "/getSchedule/" + hospitalId + '/' + doctorId,
+                    cache: false,
+                    dataType: 'JSON',
+
+                    success: function(result){
+
+                           var eventData = [];
+
+                           for (var date in result) {
+                               eventData.push({"date": date, "badge": false, "title": ""})
+                           }
+
+                           $("#calendar").empty();
+                               var calendar = $('<div></div');
+                               calendar.attr('id', 'my-calendar');
+                               $("#calendar").append(calendar);
+
+                               $("#my-calendar").zabuto_calendar({
+                                   language: "ru",
+                                   show_previous: false,
+                                   data: eventData,
+                                   show_next: 2
+                           });
 
                     }
                 });
