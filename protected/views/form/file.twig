@@ -1,0 +1,9 @@
+{% set error = form.error(model, field, {class: 'help-block'}) %}
+{% set i18n_field = not language or language == model.defaultLanguage? field: field ~ '_' ~ language %}
+{% set htmlOptions = {class: 'form-control'}|merge(htmlOptions?: {}) %}
+
+<div class="{{ wrapperClass|default('form-group') }}">
+	{{ form.labelEx(model, field, {class: labelClass|default('control-label')}) }}
+	{{ form.fileField(model, i18n_field, htmlOptions) }}
+	{{ error }}
+</div>

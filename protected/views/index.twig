@@ -1,1 +1,101 @@
-Hello world
+{% extends '/layouts/common.twig' %}
+
+{% block content %}
+     <div class="header">
+    	<h1>Онлайн запись на прием к врачу</h1>
+    </div>
+    
+    <div class="container">
+    	<div class="container-top">
+
+
+
+        </div>
+        
+        <!--STEPS FORM START ------------ -->
+        <div class="stepsForm">
+            <form method="post">
+                <div class="sf-steps">
+                    <div class="sf-steps-content">
+                    	<div>
+                        	<span>1</span> Доктор
+                        </div>
+                        <div>
+                        	<span>2</span> Время
+                        </div>
+                        <div>
+                        	<span>3</span> Контакты
+                        </div>
+                    </div>
+                </div>        
+                
+                
+                <div class="sf-steps-form sf-radius"> 
+                           {% set form = this.beginWidget('CActiveForm', { id: 'booking', enableAjaxValidation: false  }) %}
+                    
+                    <ul class="sf-content">
+                        {{ include('form/select.twig', { form: form, model: model, field: 'specializeId', data: specialize }) }}
+                        {{ include('form/select.twig', { form: form, model: model, field: 'hospitalId', data: {}, inVisible: true }) }}
+                        {{ include('form/select.twig', { form: form, model: model, field: 'doctorId', data: {}, inVisible: true }) }}
+                    </ul>
+                       
+                    <ul class="sf-content"> <!-- form step two --> 
+
+                         <li>
+                            <div class="sf_columns column_6">
+                                <div id="my-calendar"></div>
+                            </div>
+                         </li>
+                         
+                        <li>
+                              <label class="sf-select">
+                                    
+                                    
+                                    <select>
+                                    	<option value="" selected="selected" >Select country...</option>
+                                        <option value="de">Germany</option>
+                                        <option value="en">England</option>
+                                        <option value="us">United States</option>
+                                        <option value="tr">Turkey</option>
+                                        <option value="jp">Japan</option>
+                                    </select>
+                                    <span></span>
+                                </label>
+                         </li>
+                    </ul>
+    
+                    <ul class="sf-content"> <!-- form step tree --> 
+                         <li>
+                            <div class="sf_columns column_6">
+                                <input type="text" placeholder="Name" data-number="true">
+                            </div>
+                         </li>
+                         
+                         <li>
+                            <div class="sf_columns column_6">
+                                <input type="text" placeholder="Phone" data-number="true">
+                            </div>
+                         </li>
+                         
+                         <li>
+                            <div class="sf_columns column_6">
+                                <input type="text" placeholder="Email" data-number="true">
+                            </div>
+                         </li>
+                    </ul>
+                           {% do this.endWidget() %}
+                </div>
+                
+                <div class="sf-steps-navigation sf-align-right">
+                	<span id="sf-msg" class="sf-msg-error"></span>
+                	<button id="sf-prev" type="button" class="sf-button">Назад</button>
+                    <button id="sf-next" type="button" class="sf-button">Далее</button>
+                </div>
+            </form>
+        </div>
+        <!--STEPS FORM END -------------- -->
+       
+    </div>
+    
+
+{% endblock %}

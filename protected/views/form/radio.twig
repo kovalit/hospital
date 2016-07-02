@@ -1,0 +1,11 @@
+{% set error = form.error(model, field, {class: 'help-block'}) %}
+{% set field = not language or language == model.defaultLanguage? field: field ~ '_' ~ language %}
+
+<div class="{{ wrapperClass|default('radio') }}">
+	<label>
+		{{ form.radioButton(model, field, htmlOptions) }}
+		{{ hideLabel? '': model.getAttributeLabel(field) }}
+	</label>
+	{{ error }}
+</div>
+
