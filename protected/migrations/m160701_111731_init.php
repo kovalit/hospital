@@ -4,7 +4,7 @@ class m160701_111731_init extends DbMigration {
 	public function safeUp() {  
              $this->createTable('hospitals', [
 			'id'                => 'int(8) unsigned NOT NULL AUTO_INCREMENT',
-			'name'              => 'varchar(32) NOT NULL',
+			'name'              => 'varchar(128) NOT NULL',
                         'active'            => 'tinyint(1) unsigned NOT NULL DEFAULT 1',
 			'PRIMARY KEY (`id`)',
             ]);
@@ -18,14 +18,15 @@ class m160701_111731_init extends DbMigration {
             $this->createTable('doctors', [
 			'id'                => 'int(8) unsigned NOT NULL AUTO_INCREMENT',
 			'firstName'         => 'varchar(16) NOT NULL',
-			'middleName'        => 'varchar(16) NOT NULL',
-			'lastName'          => 'varchar(32) DEFAULT NULL',
+			'middleName'        => 'varchar(16) NULL DEFAULT NULL',
+			'lastName'          => 'varchar(32) NOT NULL',
                         'active'            => 'tinyint(1) unsigned NOT NULL DEFAULT 1',
 			'PRIMARY KEY (`id`)',
 		]);
             
             $this->createTable('schedules', [
 			'id'                => 'int(8) unsigned NOT NULL AUTO_INCREMENT',
+                        'hospitalId'        => 'int(8) unsigned NOT NULL',
                         'doctorId'          => 'int(8) unsigned NOT NULL',
                         'scheme'            => 'text NOT NULL',
                         'date'              => 'date NULL DEFAULT NULL',
@@ -33,6 +34,7 @@ class m160701_111731_init extends DbMigration {
                         'isException'       => 'tinyint(1) unsigned NOT NULL DEFAULT 0',
                         'PRIMARY KEY (`id`)',
                         'CONSTRAINT `schedules_doctors` FOREIGN KEY (`doctorId`) REFERENCES `doctors` (`id`)',
+                        'CONSTRAINT `schedules_hospital` FOREIGN KEY (`hospitalId`) REFERENCES `hospitals` (`id`)',
 		]);
             
             $this->createTable('staff', [
@@ -90,12 +92,12 @@ class m160701_111731_init extends DbMigration {
 
 	public function safeDown() {
             $this->dropTable('booking');
+            $this->dropTable('schedules');
             $this->dropTable('users');
             $this->dropTable('skills');
             $this->dropTable('staff');
             $this->dropTable('doctors');
             $this->dropTable('specialize');
-            $this->dropTable('schedules');
             $this->dropTable('hospitals'); 
 	}
 }
