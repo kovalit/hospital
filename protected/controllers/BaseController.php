@@ -3,6 +3,15 @@
 abstract class BaseController extends CController {
 
 	public $layout = null;
+        
+        public function renderList(array $data) {
+		$items = [];
+                foreach ($data as $item) {
+                        $items[$item['id']] = $item['name'];
+                }
+                
+                $this->renderJson($items);
+	}
 
 	public function renderJson(array $data) {
 		header('Content-Type: application/json; charset=utf-8');
