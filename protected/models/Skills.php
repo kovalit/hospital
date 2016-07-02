@@ -36,7 +36,8 @@ class Skills extends ActiveRecord {
 	
 	public function relations() {
 		return [
-                   	
+                    'doctors'  => [self::HAS_MANY, 'Doctors', ['id' => 'doctorId']],
+                    'specialize'  => [self::HAS_MANY, 'Specialize', ['id' => 'specializeId']]
 		];
 	}
         

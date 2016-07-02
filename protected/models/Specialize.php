@@ -47,8 +47,19 @@ class Specialize extends ActiveRecord {
 	public function attributeLabels() {
 		return array(
 			'id' => 'ID',
-			'name' => 'Имя',
+			'name' => 'Выберите специализацию...',
 		);
+	}
+        
+        public function getList() {
+                $model = get_class($this);
+		$items = [];
+                $items[''] = $model::model()->getAttributeLabel('name');
+		foreach ($model::model()
+					->findAll() as $item) {
+			$items[$item['id']] = $item['name'];
+		}
+		return $items;
 	}
         
 	

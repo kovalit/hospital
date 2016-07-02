@@ -62,5 +62,5 @@ class ActiveRecord extends CActiveRecord {
 			'offset' => (int) $offset,
 		]);
 		return $this;
-	}
+	}        
 }

@@ -47,7 +47,7 @@ class Hospitals extends ActiveRecord {
 	public function attributeLabels() {
 		return array(
 			'id' => 'ID',
-			'name' => 'Имя',
+			'name' => 'Выберите клинику...',
 		);
 	}
         

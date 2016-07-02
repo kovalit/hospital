@@ -6,6 +6,8 @@ class Doctors extends ActiveRecord {
 	public $middleName;
         public $lastName;
         public $active;
+        
+        public $name;
 
 	/**
 	 * @return string
@@ -49,6 +51,7 @@ class Doctors extends ActiveRecord {
 	public function attributeLabels() {
 		return array(
 			'id' => 'ID',
+                        'name' => 'Выберите доктора...',
 			'firstName' => 'Имя',
 			'middleName' => 'Отчество',
 			'lastName' => 'Фамилия',

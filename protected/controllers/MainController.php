@@ -4,7 +4,13 @@ class MainController extends BaseController {
 
     
 	public function actionIndex() {
-		$this->render("/index");
+                $specialize = Specialize::model()->getList();
+                $model      = new BookingForm;
+                
+		$this->render("/index", [
+                    'model'        => $model,
+                    'specialize'    => $specialize
+                ]);
 	}
 
 	
@@ -15,7 +21,7 @@ class MainController extends BaseController {
 				echo $error['message'];
 			} else {
 				try {
-					$this->render("/error{$error['code']}", ['error' => $error]);
+					$this->render("/error", ['error' => $error]);
 				} catch (CExceptison $e) {
 					if ($error['code'] === 403) {
 						$this->redirect(Yii::app()->user->loginUrl);
@@ -54,7 +60,14 @@ class MainController extends BaseController {
                 $hospitals = Hospitals::model()
                         ->findAll($criteria);
                 
-                $this->renderList($hospitals);
+                $items = [];
+                $items[''] = Hospitals::model()->getAttributeLabel('name');
+		foreach ($hospitals as $item) {
+                        $key = $item['id'];
+			$items[$key] = $item['name'];
+		}
+                
+                $this->renderJson($items);
                 
         }
         
@@ -79,12 +92,15 @@ class MainController extends BaseController {
                 $doctors = Doctors::model()
                         ->findAll($criteria);
                 
-                $this->renderList($doctors);
+                $items = [];
+                $items[''] = Doctors::model()->getAttributeLabel('name');
+		foreach ($doctors as $item) {
+                        $key = $item['id'];
+			$items[$key] = $item['name'];
+		}
+                
+                $this->renderJson($items);
                 
         }
-        
-        
-        
 
-	
 }
