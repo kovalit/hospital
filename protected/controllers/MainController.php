@@ -50,11 +50,16 @@ class MainController extends BaseController {
                 $criteria->alias    = 'hospitals';
                 $criteria->select   = ['hospitals.id as id', 'hospitals.name as name'];
                 $criteria->join     = 'Left JOIN staff on staff.hospitalId = hospitals.id' . ' ';
-                $criteria->join    .= 'Left JOIN skills on skills.doctorId = staff.doctorId';
+                $criteria->join    .= 'Left JOIN skills on skills.doctorId = staff.doctorId' . ' ';
+                $criteria->join    .= 'Left JOIN schedules on schedules.hospitalId = hospitals.id '
+                        . 'AND schedules.doctorId = staff.doctorId'; 
+                
                 $criteria->distinct = 'true';
                 $criteria->order    = 'name asc';
 
-                $criteria->condition = 'skills.specializeId=:specializeId';
+                $criteria->condition = 'skills.specializeId=:specializeId '
+                        . 'AND schedules.doctorId is not null';
+                
                 $criteria->params    = [':specializeId'=>$specializeId];
 
                 $hospitals = Hospitals::model()
@@ -82,11 +87,14 @@ class MainController extends BaseController {
                 $criteria->alias    = 'doctors';
                 $criteria->select   = ['doctors.id as id', 'concat(doctors.firstName," ",lastName) as name'];
                 $criteria->join     = 'Left JOIN staff on staff.doctorId = doctors.id' . ' ';
-                $criteria->join    .= 'Left JOIN skills on skills.doctorId = staff.doctorId';
+                $criteria->join    .= 'Left JOIN skills on skills.doctorId = staff.doctorId' . ' ';
+                $criteria->join    .= 'Left JOIN schedules on schedules.doctorId = doctors.id'; 
                 $criteria->distinct = 'true';
                 $criteria->order    = 'name asc';
 
-                $criteria->condition = 'skills.specializeId=:specializeId AND staff.hospitalId=:hospitalId';
+                $criteria->condition = 'skills.specializeId=:specializeId '
+                        . 'AND staff.hospitalId=:hospitalId '
+                        . 'AND schedules.hospitalId=:hospitalId';
                 $criteria->params    = [':specializeId'=>$specializeId, ':hospitalId'=>$hospitalId];
 
                 $doctors = Doctors::model()
@@ -101,6 +109,11 @@ class MainController extends BaseController {
                 
                 $this->renderJson($items);
                 
+        }
+        
+        public function actionGetSchedule($hospitalId = null, $doctorId = null) {
+            $Schedules = Schedules::model()->findByAttributes(['hospitalId'=>$hospitalId, 'doctorId'=>$doctorId]);
+            echo $Schedules->scheme;
         }
 
 }

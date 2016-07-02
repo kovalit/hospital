@@ -4,7 +4,7 @@ class Schedules extends ActiveRecord {
 	
 	public $doctorId;
 	public $scheme;
-	public $date;
+	public $active;
         public $version;
         public $isException;
 
@@ -33,7 +33,7 @@ class Schedules extends ActiveRecord {
 	public function rules() {
 		return [
 			['doctorId, scheme, version', 'required'],
-			['doctorId, scheme, version, isException, date', 'safe'],
+			['doctorId, scheme, version, isException, active', 'safe'],
 		];
 	}
 	
