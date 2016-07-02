@@ -1,0 +1,21 @@
+{
+  "name": "default",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "kovalit <kovalit@mail.ru>"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.4",
+    "calendar": "https://github.com/zabuto/calendar.git"
+  }
+}
