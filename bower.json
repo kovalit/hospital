@@ -15,7 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "^2.2.4",
-    "calendar": "https://github.com/zabuto/calendar.git"
+    "jquery": "^2.0.3",
+    "calendar": "https://github.com/zabuto/calendar.git#master"
   }
 }
