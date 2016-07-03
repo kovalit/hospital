@@ -1,7 +1,6 @@
 {% set error = form.error(model, field, {class: 'help-block'}) %}
+{% set htmlOptions = {'data-required': "true"} %}
 
-<div class="form__row">
-	{{ form.labelEx(model, field, {class: 'control-label'}) }}
-	{{ form.emailField(model, field) }}
-	{{ error }}
-</div>
+{{ form.hiddenField(model, field, htmlOptions) }}
+{{ error }}
+
