@@ -12,7 +12,6 @@
 
         </div>
         
-        <!--STEPS FORM START ------------ -->
         <div class="stepsForm">
             <form method="post">
                 <div class="sf-steps">
@@ -42,26 +41,14 @@
                     <ul class="sf-content"> <!-- form step two --> 
 
                          <li>
-                            <div class="sf_columns column_6">
+                            <div class="sf_columns column_6" id="calendar">
                                 <div id="my-calendar"></div>
                             </div>
                          </li>
+                         {{ include('form/hidden.twig', { form: form, model: model, field: 'date' }) }}
+                         {{ include('form/select.twig', { form: form, model: model, field: 'time', data: {}, inVisible: true }) }}
                          
-                        <li>
-                              <label class="sf-select">
-                                    
-                                    
-                                    <select>
-                                    	<option value="" selected="selected" >Select country...</option>
-                                        <option value="de">Germany</option>
-                                        <option value="en">England</option>
-                                        <option value="us">United States</option>
-                                        <option value="tr">Turkey</option>
-                                        <option value="jp">Japan</option>
-                                    </select>
-                                    <span></span>
-                                </label>
-                         </li>
+ 
                     </ul>
     
                     <ul class="sf-content"> <!-- form step tree --> 

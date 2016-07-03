@@ -6,8 +6,7 @@ class BookingForm extends CFormModel {
 	public $hospitalId;
 	public $doctorId;
         public $date;
-        public $start;
-        public $end;
+        public $time;
         public $name;
         public $phone;
         public $email;
