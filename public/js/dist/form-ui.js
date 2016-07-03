@@ -1,22 +1,38 @@
 
 $(function () {
     
-   
-
- 
+        var fields = {
+            specialize  : '#BookingForm_specializeId',
+            hospitals   : '#BookingForm_hospitalId',
+            doctors     : '#BookingForm_doctorId',
+            date        : '#BookingForm_date',
+            time        : '#BookingForm_time' 
+        };
     
+        var dataList = {};
+
+        function  fillTime () {
+
+                var timeList = $(fields.time);
+                var date = $(this).data("date");
+
+                $(fields.date).val(date);
+                timeList.empty();
+                timeList.append($("<option></option>").val('').html('Выберете время...'));
+                $.each(dataList[date], function (key, value) {
+                        if (key !== '') timeList.append($("<option></option>").val(key).html(value));
+                });
+
+                timeList.parents('.form-row').fadeIn();
+        } 
+
 
     
-
-    
-    $("#BookingForm_specializeId").on('change', function() {
- 
-        
-        
-        
-            var specializeId = $(this).val();
-            var hospitals = $("#BookingForm_hospitalId");
-            var doctors = $("#BookingForm_doctorId");
+        $(fields.specialize).on('change', function() {
+                var specializeId = $(this).val();
+                if (specializeId === '') {
+                    return;
+                }
                 $.ajax({
                     type: "GET",
                     url: "/getHospitals/" + specializeId,
@@ -24,77 +40,131 @@ $(function () {
                     dataType: 'JSON',
 
                     success: function(result){
-                          hospitals.empty();
-                          doctors.parents('.form-row').fadeOut();
-                          hospitals.append($("<option></option>").val('').html(result['']));
-                            $.each(result, function (key, value) {
-                                    if (key !== '') hospitals.append($("<option></option>").val(key).html(value));
-                            });
-                            hospitals.parents('.form-row').fadeIn();
+                          changeVisibility(result, 'specialize');
                     }
                 });
-    });
+        });
     
-     $("#BookingForm_hospitalId").on('change', function() {
+    function changeVisibility(data, source) {
+        var hospitalsList = $(fields.hospitals);
+        var doctorsList = $(fields.doctors);
+        var timeList = $(fields.time);
+        var date = $(fields.date);
+       
+        
+        switch (source) {
+            
+            case 'specialize':
+                
+     
+                hospitalsList.empty();
+                hospitalsList.append($("<option></option>").val('').html(data['']));
+                $.each(data, function (key, value) {
+                        if (key !== '') hospitalsList.append($("<option></option>").val(key).html(value));
+                });     
+                
+                hospitalsList.parents('.form-row').fadeIn();
+                doctorsList.parents('.form-row').fadeOut();
+                date.val('');
+                timeList.parents('.form-row').fadeOut();
+                
+                break;
+                
+            case 'hospitals':
+                
 
-            var specializeId = $('#BookingForm_specializeId').val();
+                doctorsList.empty();
+                doctorsList.append($("<option></option>").val('').html(data['']));
+                $.each(data, function (key, value) {
+                        if (key !== '') doctorsList.append($("<option></option>").val(key).html(value));
+                });
+                
+                doctorsList.parents('.form-row').fadeIn();
+                date.val('');
+                timeList.parents('.form-row').fadeOut();
+              
+              break;
+              
+            case 'doctors':
+                
+
+                
+                var eventData = [];
+                date.val('');
+                
+                dataList = data;
+
+                for (var date in data) {
+                    eventData.push({"date": date, "badge": false, "title": ""})
+                }
+
+                $("#calendar").empty();
+                var calendar = $('<div></div');
+                calendar.attr('id', 'my-calendar');
+                $("#calendar").append(calendar);
+                
+                $("#my-calendar").zabuto_calendar({
+                    language: "ru",
+                    show_previous: false,
+                    data: eventData,
+                    show_next: 2,
+                });
+                
+                $("td.event").on('click', fillTime);
+                
+                
+                
+                
+                timeList.parents('.form-row').fadeOut();
+                break;
+        }
+    }
+    
+    
+     $(fields.hospitals).on('change', function() {
+            var specializeId = $(fields.specialize).val();
             var hospitalId = $(this).val();
-            var doctors = $("#BookingForm_doctorId");
-                $.ajax({
-                    type: "GET",
-                    url: "/getDoctors/" + hospitalId + '/' + specializeId,
-                    cache: false,
-                    dataType: 'JSON',
+            if (hospitalId === '') {
+                return;
+            }
+            $.ajax({
+                type: "GET",
+                url: "/getDoctors/" + hospitalId + '/' + specializeId,
+                cache: false,
+                dataType: 'JSON',
 
-                    success: function(result){
-                          doctors.empty();
-                          doctors.append($("<option></option>").val('').html(result['']));
-                            $.each(result, function (key, value) {
-                                    if (key !== '') doctors.append($("<option></option>").val(key).html(value));
-                            });
-                            doctors.parents('.form-row').fadeIn();
+                success: function(result){
+                      changeVisibility(result, 'hospitals');
 
-                    }
-                });
+                }
+            });
     });
     
     
-    $("#BookingForm_doctorId").on('change', function() {
-        
-        
-         
-
-            var hospitalId = $('#BookingForm_hospitalId').val();
+    $(fields.doctors).on('change', function() {
+            var hospitalId = $(fields.hospitals).val();
             var doctorId = $(this).val();
-                $.ajax({
-                    type: "GET",
-                    url: "/getSchedule/" + hospitalId + '/' + doctorId,
-                    cache: false,
-                    dataType: 'JSON',
+             if (doctorId === '') {
+                return;
+            }
+            
+            $.ajax({
+                type: "GET",
+                url: "/getSchedule/" + hospitalId + '/' + doctorId,
+                cache: false,
+                dataType: 'JSON',
 
-                    success: function(result){
+                success: function(result){
+                    changeVisibility(result, 'doctors') 
 
-                           var eventData = [];
 
-                           for (var date in result) {
-                               eventData.push({"date": date, "badge": false, "title": ""})
-                           }
 
-                           $("#calendar").empty();
-                               var calendar = $('<div></div');
-                               calendar.attr('id', 'my-calendar');
-                               $("#calendar").append(calendar);
 
-                               $("#my-calendar").zabuto_calendar({
-                                   language: "ru",
-                                   show_previous: false,
-                                   data: eventData,
-                                   show_next: 2
-                           });
-
-                    }
-                });
+                }
+            });
     });
+    
+ 
 
     $(".stepsForm").stepsForm({
             width: '100%',

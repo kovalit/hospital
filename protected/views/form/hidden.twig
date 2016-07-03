@@ -1,0 +1,7 @@
+{% set error = form.error(model, field, {class: 'help-block'}) %}
+
+<div class="form__row">
+	{{ form.labelEx(model, field, {class: 'control-label'}) }}
+	{{ form.emailField(model, field) }}
+	{{ error }}
+</div>
