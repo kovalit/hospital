@@ -164,8 +164,70 @@ class MainController extends BaseController {
         }
         
         public function actionGetSchedule($hospitalId = null, $doctorId = null) {
-            $Schedules = Schedules::model()->findByAttributes(['hospitalId'=>$hospitalId, 'doctorId'=>$doctorId]);
-            echo $Schedules->scheme;
-        }
+         
+            # GET Schedules
+            $schedules = Schedules::model()->findByAttributes([
+                'hospitalId'=> $hospitalId, 
+                'doctorId'  => $doctorId,
+                'active'    => 1
+            ]);
+            
+            $criteria           = new CDbCriteria;
+            
+            $criteria->condition = 'hospitalId = :hospitalId '
+                        . 'AND doctorId = :doctorId '
+                        . 'AND active = 1 '
+                        . 'AND date >= CURDATE()';
+            
+            $criteria->params    = [
+                        ':hospitalId'=>$hospitalId, 
+                        ':doctorId'=>$doctorId
+                    ];
+            
+            $scheme = json_decode($schedules->scheme, true);
+            
 
+            # GET busy
+            $booking = Booking::model()
+                        ->findAll($criteria);
+
+            $busy = [];
+            
+            foreach ($booking as $item) {
+                    $key = $item['date'];
+
+                    if (!array_key_exists($key, $busy)) {
+                        $busy[$key] = [];  
+                    }
+
+                    $value  = date("H:i", strtotime($item['date'] . ' ' . $item['start']));
+                    $value .= '-';
+                    $value .= date("H:i", strtotime($item['date'] . ' ' . $item['end']));
+
+                    array_push($busy[$key], $value);
+            }
+
+            # Calc different 
+            $result = [];
+            
+            foreach  ($scheme as $day => $timeList) {
+                
+                    if (array_key_exists($day, $busy)) {
+                        
+                        $arrayDiff = array_diff($timeList, $busy[$day]);
+                        
+                        if (!empty($arrayDiff)) {
+                                $result[$day] = $arrayDiff;
+                        }
+
+                    }
+                    else {
+                        $result[$day] = $timeList;
+                    }
+            }
+
+
+            $this->renderJson($result);
+
+        }
 }
