@@ -103,13 +103,10 @@
             }), f.find("#sf-next").on("click", function() {
                 requredcontrol = !1, f.find(".sf-steps-form>ul").eq(t.active).find(":input").each(function() {
                     "true" == $(this).attr("data-required") && "" == $(this).val() ? ($(this).addClass("sf-error"), requredcontrol = !0) : "true" != $(this).attr("data-required") || "radio" != $(this).attr("type") && "checkbox" != $(this).attr("type") ? "" != $(this).val() && ("true" == $(this).attr("data-email") && 0 == r($(this).val()) && ($(this).addClass("sf-error"), requredcontrol = !0), "true" == $(this).attr("data-number") && isNaN($(this).val()) && ($(this).addClass("sf-error"), requredcontrol = !0), "true" == $(this).attr("data-confirm") && (h.push($(this).val()), u.push($(this)), a())) : "radio" == $(this).attr("type") ? $(this).parent().parent().find("input[type='radio']:checked").length < 1 && ($(this).addClass("sf-error"), requredcontrol = !0) : $(this).parent().parent().find("input[type='checkbox']:checked").length < 1 && ($(this).addClass("sf-error"), requredcontrol = !0)
-                }), d(), h.length = 0, requredcontrol ? f.find("#sf-msg").html(t.errormsg) : (o(), u.length = 0, f.find("#sf-next").text() == t.sendbtntext ? (f.find("#sf-msg").text(""), $.ajax({
-                    type: "POST",
-                    url: t.posturl,
-                    data: f.find("form").serialize()
-                }).success(function(t) {
-                    f.find("#sf-msg").html(t)
-                })) : (t.active++, t.active > c - 1 ? (t.active--, f.find("#sf-msg").text("")) : (n(), requredcontrol = !1, f.find("#sf-msg").text(""))))
+                }), d(), h.length = 0, requredcontrol ? f.find("#sf-msg").html(t.errormsg) : (o(), u.length = 0, f.find("#sf-next").text() == t.sendbtntext ? (f.find("#sf-msg").text(""), 
+            f.find("form").submit()
+                        
+                    ) : (t.active++, t.active > c - 1 ? (t.active--, f.find("#sf-msg").text("")) : (n(), requredcontrol = !1, f.find("#sf-msg").text(""))))
             }), f.find("#sf-prev").on("click", function() {
                 t.active--, t.active < 0 ? t.active++ : (n(), requredcontrol = !1)
             }), s(), $(window).resize(function() {

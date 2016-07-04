@@ -18,9 +18,10 @@ class BookingForm extends CFormModel {
 	 * and password needs to be authenticated.
 	 */
 	public function rules() {
-		return array(
+		return [
+                    ['specializeId, hospitalId, doctorId, date, time, name, phone, email', 'required'],
 
-		);
+		];
 	}
 
 	/**

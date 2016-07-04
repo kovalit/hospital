@@ -1,10 +1,15 @@
 {% set error = form.error(model, field, {class: 'help-block'}) %}
-{% set htmlOptions = {'data-required': "true", class: 'form-control'}|merge(htmlOptions?: {}) %}
+
+{% if model.isAttributeRequired(field) %}
+    {% set htmlOptions = {'data-required': "true"} %}
+{% endif %}
+
 {%if inVisible %}
     {% set visibleClass = 'in_visible' %}
 {% else %}
     {% set visibleClass = 'visible' %}
 {% endif %}
+
 <li class="form-row {{ visibleClass }}">
    <div class="{{ wrapperClass|default('sf_columns column_6') }}">
        <label class="sf-select">

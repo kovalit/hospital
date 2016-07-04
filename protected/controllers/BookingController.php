@@ -4,7 +4,7 @@ class BookingController extends BaseController {
 
     
 	public function actionIndex() {
-		$this->render("/index");
+		$this->render("/booking");
 	}
 
 	

@@ -58,11 +58,11 @@ class Users extends ActiveRecord {
 	/** @return array */
 	public function rules() {
 		return array(
-			array('login, email, pass', 'required'),
+			array('email', 'required'),
 			array('login, email', 'length', 'max' => 100),
 			array('email', 'email'),
 			array('login, email', 'unique'),
-			array('confirmPassword', 'compare', 'compareAttribute' => 'password'),
+			array('confirmPassword', 'compare', 'compareAttribute' => 'pass'),
 			array('pass, confirmPassword', 'unsafe'),
 			array('name, email', 'safe'),
 			array('id, name, email', 'safe', 'on' => 'search'),
@@ -74,7 +74,7 @@ class Users extends ActiveRecord {
 		return array(
 			'id'              => 'ID',
 			'username'        => 'Login',
-			'password'        => 'Password',
+			'pass'        => 'Password',
 			'confirmPassword' => 'Confirm password',
 			'salt'            => 'Security salt',
 			'email'           => 'Email',
@@ -84,12 +84,12 @@ class Users extends ActiveRecord {
 	}
 
 	/**
-	 * @param string $password
+	 * @param string $pass
 	 * @param bool $encode
 	 * @return void
 	 */
-	public function setPassword($password, $encode = true) {
-		$this->password = $password;
+	public function setPassword($pass, $encode = true) {
+		$this->pass = $pass;
 		$this->needEncodePassword = $encode;
 	}
 
@@ -97,15 +97,15 @@ class Users extends ActiveRecord {
 	 * @return string
 	 */
 	public function getPassword() {
-		return $this->password;
+		return $this->pass;
 	}
 
 	/**
-	 * @param string $password
+	 * @param string $pass
 	 * @return void
 	 */
-	public function setConfirmPassword($password) {
-		$this->confirmPassword = $password;
+	public function setConfirmPassword($pass) {
+		$this->confirmPassword = $pass;
 	}
 
 	/**
@@ -133,40 +133,46 @@ class Users extends ActiveRecord {
 	}
 
 	/**
-	 * Checks if the given password is correct.
-	 * @param string $password the password to be validated
-	 * @return boolean whether the password is valid
+	 * Checks if the given pass is correct.
+	 * @param string $pass the pass to be validated
+	 * @return boolean whether the pass is valid
 	 */
-	public function validatePassword($password) {
-		return $this->hashPassword($password, $this->getSalt()) === $this->password;
+	public function validatePassword($pass) {
+		return $this->hashPassword($pass, $this->getSalt()) === $this->pass;
 	}
 
 	/**
-	 * Generates the password hash.
-	 * @param string $password
+	 * Generates the pass hash.
+	 * @param string $pass
 	 * @param string $salt
 	 * @return string hash
 	 */
-	public function hashPassword($password, $salt) {
-		return md5($salt . $password);
+	public function hashPassword($pass, $salt) {
+		return md5($salt . $pass);
 	}
 
         
 	protected function beforeSave() {
+            
+                if (!$this->isReg) {
+                    return parent::beforeSave();
+                }
+                
 		if ($this->needEncodePassword || !$this->salt) {
-			$this->password = $this->hashPassword($this->password, $this->getSalt());
+			$this->pass = $this->hashPassword($this->pass, $this->getSalt());
 		}
+                
 		return parent::beforeSave();
 	}
 
         
 	protected function afterFind() {
-		$this->confirmPassword = $this->password;
+		$this->confirmPassword = $this->pass;
 		parent::afterFind();
 	}
 
 	/**
-	 * Generates a salt that can be used to generate a password hash.
+	 * Generates a salt that can be used to generate a pass hash.
 	 * @return string the salt
 	 */
 	public function generateSalt() {

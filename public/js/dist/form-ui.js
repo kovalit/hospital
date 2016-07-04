@@ -20,7 +20,7 @@ $(function () {
                 timeList.empty();
                 timeList.append($("<option></option>").val('').html('Выберете время...'));
                 $.each(dataList[date], function (key, value) {
-                        if (key !== '') timeList.append($("<option></option>").val(key).html(value));
+                        if (key !== '') timeList.append($("<option></option>").val(value).html(value));
                 });
 
                 timeList.parents('.form-row').fadeIn();
@@ -40,7 +40,7 @@ $(function () {
                     dataType: 'JSON',
 
                     success: function(result){
-                          changeVisibility(result, 'specialize');
+ changeVisibility(result, 'specialize');
                     }
                 });
         });
@@ -56,7 +56,6 @@ $(function () {
             
             case 'specialize':
                 
-     
                 hospitalsList.empty();
                 hospitalsList.append($("<option></option>").val('').html(data['']));
                 $.each(data, function (key, value) {
@@ -86,14 +85,12 @@ $(function () {
               break;
               
             case 'doctors':
-                
 
-                
                 var eventData = [];
                 date.val('');
                 
                 dataList = data;
-
+                console.log(data);
                 for (var date in data) {
                     eventData.push({"date": date, "badge": false, "title": ""})
                 }
@@ -111,10 +108,7 @@ $(function () {
                 });
                 
                 $("td.event").on('click', fillTime);
-                
-                
-                
-                
+
                 timeList.parents('.form-row').fadeOut();
                 break;
         }
@@ -171,7 +165,7 @@ $(function () {
             active: 0,
             errormsg: 'Check faulty fields.',
             sendbtntext: 'Отправить',
-            posturl: 'core/demo_steps_form.php',
+            posturl: '/',
             theme: 'green',
     });
 

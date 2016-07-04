@@ -59,11 +59,11 @@ class m160701_111731_init extends DbMigration {
             
             $this->createTable('users', [
 			'id'                => 'int(11) unsigned NOT NULL AUTO_INCREMENT',
-                        'login'             => 'varchar(32) NOT NULL',
+                        'login'             => 'varchar(32) NULL DEFAULT NULL',
                         'name'              => 'varchar(64) NULL DEFAULT NULL',
-                        'email'             => 'varchar(64) NULL DEFAULT NULL',
+                        'email'             => 'varchar(64) NOT NULL',
                         'phone'             => 'varchar(10) NULL DEFAULT NULL',
-                        'pass'              => 'varchar(16) NULL DEFAULT NULL',
+                        'pass'              => 'varchar(64) NULL DEFAULT NULL',
                         'salt'              => 'varchar(64) NULL DEFAULT NULL',
                         'active'            => 'tinyint(1) unsigned NOT NULL DEFAULT 1',
                         'source'            => 'varchar(32) NULL DEFAULT NULL',
