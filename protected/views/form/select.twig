@@ -1,6 +1,6 @@
 {% set error = form.error(model, field, {class: 'help-block'}) %}
 
-{% if model.isAttributeRequired(field) %}
+{% if model.isAttributeRequired(field) or isRequired %}
     {% set htmlOptions = {'data-required': "true"} %}
 {% endif %}
 

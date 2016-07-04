@@ -9,7 +9,13 @@ class Booking extends ActiveRecord {
         public $start;
         public $end;
         public $active;
+        public $name;
+        public $phone;
+        public $email;
         public $created;
+        
+        public $specializeId;
+        public $time;
 
 	/**
 	 * @return string
@@ -35,7 +41,7 @@ class Booking extends ActiveRecord {
 
 	public function rules() {
 		return [
-			['doctorId, hospitalId, userId, date, start, end', 'required'],
+			['doctorId, hospitalId, date, start, end, name, phone, email', 'required'],
 			['doctorId, hospitalId, userId, date, start, end, active, created', 'safe'],
 		];
 	}

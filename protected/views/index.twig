@@ -30,27 +30,20 @@
                 <div class="sf-steps-form sf-radius"> 
                            
                     <ul class="sf-content">
-                        {{ include('form/select.twig', { form: form, model: model, field: 'specializeId', data: specialize }) }}
+                        {{ include('form/select.twig', { form: form, model: model, field: 'specializeId', data: specialize, isRequired: true }) }}
                         {{ include('form/select.twig', { form: form, model: model, field: 'hospitalId', data: {}, inVisible: true }) }}
                         {{ include('form/select.twig', { form: form, model: model, field: 'doctorId', data: {}, inVisible: true }) }}
                     </ul>
                        
                     <ul class="sf-content">
-
-                         <li>
-                            <div class="sf_columns column_6" id="calendar">
-                                <div id="my-calendar"></div>
-                            </div>
-                         </li>
-                         {{ include('form/hidden.twig', { form: form, model: model, field: 'date' }) }}
-                         {{ include('form/select.twig', { form: form, model: model, field: 'time', data: {}, inVisible: true }) }}
-                         
- 
+                        {{ include('form/calendar.twig') }}
+                        {{ include('form/hidden.twig', { form: form, model: model, field: 'date' }) }}
+                        {{ include('form/select.twig', { form: form, model: model, field: 'time', data: {}, inVisible: true, isRequired: true }) }}  
                     </ul>
     
-                    <ul class="sf-content"> <!-- form step tree --> 
+                    <ul class="sf-content">
                         {{ include('form/text.twig', { form: form, model: model, field: 'name' }) }}
-                        {{ include('form/text.twig', { form: form, model: model, field: 'email' }) }}
+                        {{ include('form/email.twig', { form: form, model: model, field: 'email' }) }}
                         {{ include('form/text.twig', { form: form, model: model, field: 'phone' }) }}
                     </ul>
                            

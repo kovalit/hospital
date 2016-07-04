@@ -2,11 +2,11 @@
 $(function () {
     
         var fields = {
-            specialize  : '#BookingForm_specializeId',
-            hospitals   : '#BookingForm_hospitalId',
-            doctors     : '#BookingForm_doctorId',
-            date        : '#BookingForm_date',
-            time        : '#BookingForm_time' 
+            specialize  : '#Booking_specializeId',
+            hospitals   : '#Booking_hospitalId',
+            doctors     : '#Booking_doctorId',
+            date        : '#Booking_date',
+            time        : '#Booking_time' 
         };
     
         var dataList = {};
@@ -95,12 +95,12 @@ $(function () {
                     eventData.push({"date": date, "badge": false, "title": ""})
                 }
 
-                $("#calendar").empty();
+                $("#wrapper-calendar").empty();
                 var calendar = $('<div></div');
-                calendar.attr('id', 'my-calendar');
-                $("#calendar").append(calendar);
+                calendar.attr('id', 'calendar');
+                $("#wrapper-calendar").append(calendar);
                 
-                $("#my-calendar").zabuto_calendar({
+                calendar.zabuto_calendar({
                     language: "ru",
                     show_previous: false,
                     data: eventData,

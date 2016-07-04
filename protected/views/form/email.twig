@@ -1,7 +1,24 @@
 {% set error = form.error(model, field, {class: 'help-block'}) %}
 
-<div class="form__row">
-	{{ form.labelEx(model, field, {class: 'control-label'}) }}
-	{{ form.emailField(model, field) }}
-	{{ error }}
-</div>
+{% if model.isAttributeRequired(field) %}
+    {% set required = {'data-required': "true"} %}
+{% endif %}
+
+{% set htmlOptions = {placeholder: model.getAttributeLabel(field)}|merge(required?: {}) %}
+
+{%if inVisible %}
+    {% set visibleClass = 'in_visible' %}
+{% else %}
+    {% set visibleClass = 'visible' %}
+{% endif %}
+
+<li class="form-row {{ visibleClass }}">
+   <div class="{{ wrapperClass|default('sf_columns column_6') }}">
+       <label class="sf-select">
+               {{ form.emailField(model, field, htmlOptions) }}
+           <span></span>
+       </label>
+   </div>
+</li>
+
+

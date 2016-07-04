@@ -6,32 +6,36 @@ class MainController extends BaseController {
 	public function actionIndex() {
             
                 $specialize     = Specialize::model()->getList();
-                $bookingForm    = new BookingForm;
+                $booking        = new Booking;
+                
+                $class = get_class($booking);
          
-                if (Yii::app()->request->isPostRequest && isset($_POST['BookingForm'])) {
+                if (Yii::app()->request->isPostRequest && isset($_POST[$class])) {
                        
-                        $bookingForm->attributes =  $_POST['BookingForm'];
+                        $booking->attributes = $_POST[$class];
+                        
+                        $time = $_POST[$class]['time'];
+                        
+                        if (!empty($time)) {
+                            
+                                $interval = explode('-', $time);
 
-                        $booking = new Booking(); 
-                        $booking->attributes = $bookingForm->attributes ;
-
-                        if (!empty($bookingForm->time)) {
-                                $time = explode('-', $bookingForm->time);
-
-                                if(count($time) === 2) {
-                                        $booking->start = $time[0];
-                                        $booking->end   = $time[1];  
+                                if(count($interval) === 2) {
+                                        $booking->start = $interval[0];
+                                        $booking->end   = $interval[1];  
                                 }
                         }
                         
-                        $user = Users::model()->findByAttributes(['email'=>$bookingForm->email]);
+                        # save users
+                        
+                        $user = Users::model()->findByAttributes([ 'email'=> $booking->email]);
                         
                         $userId = null;
                         
                         if (empty($user)) {
                             
                                 $usersModel = new Users();
-                                $usersModel->attributes = $bookingForm->attributes ;
+                                $usersModel->attributes = $booking->attributes ;
                                 $usersModel->isReg = 0;
                                 $usersModel->source = 'booking';
                                 if ($usersModel->save()) {
@@ -44,24 +48,17 @@ class MainController extends BaseController {
                                 $userId = $user->id;
                              
                         }
-                        
-                        
+                                          
                         $booking->userId = $userId;
-                        
-                      //  print_r($booking->attributes);
                         
                         if ($booking->save()) {
                                 $this->redirect($this->createUrl('booking/index')); 
                         }
 
-                    
-                     
-			//$this->redirect($this->createUrl('booking/index'));
-
-				}
+                }
                 
 		$this->render("/index", [
-                    'model'        => $bookingForm,
+                    'model'         => $booking,
                     'specialize'    => $specialize
                 ]);
                 
