@@ -7,8 +7,8 @@ $config = CMap::mergeArray(require('_main.php'), [
 		'db'                => [
 				'connectionString' => 'mysql:host=127.0.0.1;dbname=hospital',
 				'emulatePrepare'   => true,
-				'username' => 'hyIGwYKUTH8x',
-				'password' => 'hospital',
+				'username' => 'hospital',
+				'password' => 'hyIGwYKUTH8x',
 				'charset'  => 'utf8',
 			],
 		'log' => [

@@ -15,6 +15,10 @@ $(function () {
 
                 var timeList = $(fields.time);
                 var date = $(this).data("date");
+                $('.event').removeClass('event_select');
+                $(this).addClass('event_select');
+
+
 
                 $(fields.date).val(date);
                 timeList.empty();
@@ -105,6 +109,9 @@ $(function () {
                     show_previous: false,
                     data: eventData,
                     show_next: 2,
+                    legend: [
+                        {type: "block", label: "Доступно для записи"}
+                    ]
                 });
                 
                 $("td.event").on('click', fillTime);
