@@ -64,7 +64,10 @@ class Booking extends ActiveRecord {
 			'userId' => 'Пользователь',
                         'date' => 'Дата',
                         'start' => 'Начало',
-                        'end' => 'Конец'
+                        'end' => 'Конец',
+                        'name'=>'Имя',
+                        'phone'=>'Телефон',
+                        'email'=>'Электронная адрес'
 		);
 	}
         
