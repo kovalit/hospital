@@ -164,7 +164,9 @@ class MainController extends BaseController {
         }
         
         public function actionGetSchedule($hospitalId = null, $doctorId = null) {
-         
+            
+            $parser = new ScheduleParser();
+ 
             # GET Schedules
             $schedules = Schedules::model()->findByAttributes([
                 'hospitalId'=> $hospitalId, 
@@ -172,6 +174,10 @@ class MainController extends BaseController {
                 'active'    => 1
             ]);
             
+            # Parse Schedules
+            $scheme = $parser->getInnerFormat($schedules->scheme, $schedules->version);
+            
+            # GET busy
             $criteria           = new CDbCriteria;
             
             $criteria->condition = 'hospitalId = :hospitalId '
@@ -183,11 +189,7 @@ class MainController extends BaseController {
                         ':hospitalId'=>$hospitalId, 
                         ':doctorId'=>$doctorId
                     ];
-            
-            $scheme = json_decode($schedules->scheme, true);
-            
 
-            # GET busy
             $booking = Booking::model()
                         ->findAll($criteria);
 

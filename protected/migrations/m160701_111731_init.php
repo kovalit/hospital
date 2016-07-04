@@ -29,7 +29,7 @@ class m160701_111731_init extends DbMigration {
                         'hospitalId'        => 'int(8) unsigned NOT NULL',
                         'doctorId'          => 'int(8) unsigned NOT NULL',
                         'scheme'            => 'text NOT NULL',
-                        'version'           => 'varchar(4) NOT NULL',
+                        'version'           => 'varchar(5) NOT NULL',
                         'isException'       => 'tinyint(1) unsigned NOT NULL DEFAULT 0',
                         'active'            => 'tinyint(1) unsigned NOT NULL DEFAULT 1',
                         'created'           => 'timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP', 
