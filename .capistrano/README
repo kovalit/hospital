@@ -1,0 +1,20 @@
+# All the capistrano stuff moved to '.capistrano' dir using Capfile's :deploy_config_path and :stage_config_path variables.
+# Included '.capistrano/tasks/submodule_strategy.rb' provides submodule support.
+# Minor hack allows to specify required branch as a shell enviroment variable.
+# :deploy_to directory variable is specified in a stage file, so you can deploy several stages on the same server. Or not.
+# Stages here are development environment tiers, like "qa", "production", etc.
+# Custom stages can be configured in '.capistrano/deploy/' dir.
+
+# Install capistrano:
+$ gem install capistrano
+
+# Deploy:
+$ cap qa deploy
+
+# For specific branch:
+$ BRANCH="branch1" cap qa deploy
+
+# Rollback:
+$ cap qa deploy:rollback
+
+# vim: set filetype=sh:
