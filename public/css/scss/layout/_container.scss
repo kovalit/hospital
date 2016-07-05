@@ -50,8 +50,16 @@ body {
     padding: 50px;
     border-radius: 3px;
     box-sizing: border-box;
-    @include breakpoint(480) { 
+    
+    @include breakpoint(780) { 
+        padding: 30px; 
+    }
+    
+    @include breakpoint(640) { 
         padding: 20px; 
+    }
+    @include breakpoint(480) { 
+        padding: 10px; 
     }
 }
 .container-top {
