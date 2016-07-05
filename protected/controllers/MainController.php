@@ -242,7 +242,7 @@ class MainController extends BaseController {
                   
                             $arrayBusyDiff = array_diff($timeList, $busy[$day]); 
 
-                            if (!empty($arrayDiff)) {
+                            if (!empty($arrayBusyDiff)) {
                                     $scheme[$day] = $arrayBusyDiff;   
                             }
                             else {
