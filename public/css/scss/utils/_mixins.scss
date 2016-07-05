@@ -1,0 +1,419 @@
+//------ SASS Useful Mixins ---------------------------------------------
+
+// by Ryan Burgess
+// https://github.com/ryanburgess/SASS-Useful-Mixins
+
+// ----------------------------------------------------------------------
+
+  // Alignment
+
+// ----------------------------------------------------------------------
+// Margin auto
+// example: @include margin-auto();
+@mixin margin-auto() {
+  margin-left:auto;
+  margin-right:auto;
+}
+
+// ----------------------------------------------------------------------
+
+  // Animation
+
+// ----------------------------------------------------------------------
+
+// Animated link that has a fade-in underline
+// example: @include animate-link($screenGreen, $gothamMedium, 14);
+@mixin animate-link($color, $font, $fontSize) {
+
+  font-family:$font;
+  
+  @include single-transition(border, 0.2s, ease-in-out, 0);
+  text-decoration:none;
+
+  color: $color;
+  border-bottom:1px solid transparent;
+
+  @include rem("font-size", $fontSize);
+  
+  &:focus,
+  &:hover {
+    border-color: $color;
+  }
+}
+
+// Animations
+// example: @include animation('slide-down 5s 3');
+@mixin animation($str) {
+  -webkit-animation: #{$str};
+     -moz-animation: #{$str};
+    -ms-animation: #{$str};
+     -o-animation: #{$str};
+      animation: #{$str};
+}
+
+// Backface-visibility
+// example: @include backface-visibility("hidden");
+@mixin backface-visibility($value) {
+
+  -webkit-backface-visibility: $value;
+     -moz-backface-visibility: $value;
+      backface-visibility: $value;
+}
+
+// Keyframes
+// example: @include keyframes(slide-down) {0%{ opacity:1; } 90%{ opacity:0; }}
+@mixin keyframes($animation-name) {
+  @-webkit-keyframes #{$animation-name} {
+    @content;
+  }
+  @-moz-keyframes #{$animation-name} {
+    @content;
+  }
+  @-ms-keyframes #{$animation-name} {
+    @content;
+  }
+  @-o-keyframes #{$animation-name} {
+    @content;
+  }
+  @keyframes #{$animation-name} {
+    @content;
+  }
+}
+
+// Single Transform
+// example: @include flat-button($greyBlue, white, 5px 15px);
+@mixin single-transform($deg) {
+      -ms-transform:rotate($deg);
+  -webkit-transform:rotate($deg);
+          transform:rotate($deg);
+}
+
+// Transform
+// example: @include transform("origin", 0, 0);
+@mixin transform($type, $values...) {
+  $n: length($values);
+  $i: 1;
+
+  $originVal: ();
+
+  @while $i <= $n {
+    $itemVal: (nth($values, $i));
+    @if $type == "rotate" or $type == "rotateY" or $type == "rotateX" {
+      $originVal: append($originVal, $itemVal + deg);
+    } @else {
+      $originVal: append($originVal, $itemVal + px);
+    }
+
+    $i: $i + 1;
+  }
+  -webkit-transform: #{$type}($originVal);
+     -moz-transform: #{$type}($originVal);
+          transform: #{$type}($originVal);
+}
+
+// Transitions
+// example: @include single-transition(background, 1s, ease-in-out, 0);
+@mixin single-transition($property, $duration, $timing-function, $delay) {
+  -webkit-transition: $property $duration $timing-function $delay;
+     -moz-transition: $property $duration $timing-function $delay;
+       -o-transition: $property $duration $timing-function $delay;
+          transition: $property $duration $timing-function $delay;
+}
+
+// example: @include double-transition(background, 1s, ease-in-out, 0, opacity, .1s, ease-in-out, 0);
+@mixin double-transition($property1, $duration1, $timing-function1, $delay1, $property2, $duration2, $timing-function2, $delay2) {
+  -webkit-transition: $property1 $duration1 $timing-function1 $delay1, $property2 $duration2 $timing-function2 $delay2;
+     -moz-transition: $property1 $duration1 $timing-function1 $delay1, $property2 $duration2 $timing-function2 $delay2;
+       -o-transition: $property1 $duration1 $timing-function1 $delay1, $property2 $duration2 $timing-function2 $delay2;
+          transition: $property1 $duration1 $timing-function1 $delay1, $property2 $duration2 $timing-function2 $delay2;
+}
+
+// Translate
+// example: @include translate(0);
+@mixin translate($value) {
+  -webkit-transform: translatez($value);
+     -moz-transform: translatez($value);
+      -ms-transform: translatez($value);
+       -o-transform: translatez($value);
+          transform: translatez($value);
+}
+
+// ----------------------------------------------------------------------
+
+  // Functional
+
+// ----------------------------------------------------------------------
+
+// Hide Text
+// example: @include hide-text();
+@mixin hide-text() {
+  position: relative;
+  text-indent: -99999px;
+  display: inline-block;
+}
+
+// Hover and Focus
+// example @include hoverFocus('text-decoration', 'none');
+@mixin hoverFocus($property, $value) {
+  &:hover, &:focus {
+    #{$property}: $value;
+  }
+}
+
+// Replace text
+// example: @include replace-text();
+@mixin replace-text() {
+  border: 0;
+  color: transparent;
+  font: 0/0 a;
+  text-shadow: none;
+}
+
+// Size
+// example: @include size(200px, 100px);
+@mixin size($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+// square
+// example: @include square(200px);
+@mixin square($size) {
+  @include size($size, $size);
+}
+
+// Images
+// @include image-with-dimentions('logo.png');
+@mixin image-with-dimentions($image) {
+	width: image-width($image);
+	height: image-height($image);
+}
+
+// ----------------------------------------------------------------------
+
+  // Gradients
+
+// ----------------------------------------------------------------------
+
+// Linear Gradients
+// example: @include linearGradient(#cccccc, #333333);
+@mixin linearGradient($top, $bottom) {
+  background: #{$top}; /* Old browsers */
+  background:    -moz-linear-gradient(top, #{$top} 0%, #{$bottom} 100%); /* FF3.6+ */
+  background:        -webkit-gradient(linear, left top, left bottom, color-stop(0%, #{$top}), color-stop(100%, #{$bottom})); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #{$top} 0%, #{$bottom} 100%); /* Chrome10+,Safari5.1+ */
+  background:      -o-linear-gradient(top, #{$top} 0%, #{$bottom} 100%); /* Opera 11.10+ */
+  background:     -ms-linear-gradient(top, #{$top} 0%, #{$bottom} 100%); /* IE10+ */
+  background:         linear-gradient(to bottom, #{$top} 0%, #{$bottom} 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#{$top}', endColorstr='#{$bottom}', GradientType=0 ); /* IE6-9 */
+}
+
+// Linear Gradient angle
+// example: @include linear-gradient(-10, #cccccc, #333333);
+@mixin linear-gradient($angle, $colorStart, $colorStop){
+    background: #{$colorStart}; /* Old browsers */
+    background:    -moz-linear-gradient($angle,  #{$colorStart} 0%, #{$colorStop} 100%); /* FF3.6+ */
+    background:        -webkit-gradient(linear, left bottom, right top, color-stop(0%,#{$colorStart}), color-stop(100%,#{$colorStop})); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(45deg,  #{$colorStart} 0%,#{$colorStop} 100%); /* Chrome10+,Safari5.1+ */
+    background:      -o-linear-gradient(45deg,  #{$colorStart} 0%,#{$colorStop} 100%); /* Opera 11.10+ */
+    background:     -ms-linear-gradient(45deg,  #{$colorStart} 0%,#{$colorStop} 100%); /* IE10+ */
+    background:         linear-gradient(45deg,  #{$colorStart} 0%,#{$colorStop} 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#{$colorStart}', endColorstr='#{$colorStop}',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+// ----------------------------------------------------------------------
+
+  // Layout
+
+// ----------------------------------------------------------------------
+
+// Background cover
+// example: @include background-cover();
+@mixin background-cover(){
+  -webkit-background-size: cover;
+     -moz-background-size: cover;
+       -o-background-size: cover;
+          background-size: cover;
+}
+
+// Box Model
+@mixin box-sizing($box-model) {
+  box-sizing: $box-model;
+}
+
+// Clearfix after element
+// example: @include clearfix();
+@mixin clearfix() {
+  & {
+    *zoom: 1;
+  }
+  &:before,
+  &:after {
+    content: "";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+// Display inline block cross browser
+// example: @include inline-block();
+@mixin inline-block() {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: top;
+  zoom: 1;
+  *display: inline;
+}
+
+// ----------------------------------------------------------------------
+
+  // Media Queries
+
+// ----------------------------------------------------------------------
+
+// Media Query Breakpoints
+// example @include breakpoint(940) { width:80%; }
+@mixin breakpoint($size) {
+  @media only screen and (max-width: $size + px) { @content; }
+}
+
+// Media Query Breakpoints
+// example @include min-breakpoint(940) { width:80%; }
+@mixin min-breakpoint($size) {
+  @media only screen and (min-width: $size + px) { @content; }
+}
+
+// Retina Images
+// example: @include retina("logo2x.png", 100, 50);
+@mixin retina($image, $width, $height) {
+  @media (min--moz-device-pixel-ratio: 1.3),
+       (-o-min-device-pixel-ratio: 2.6/2),
+       (-webkit-min-device-pixel-ratio: 1.3),
+       (min-device-pixel-ratio: 1.3),
+       (min-resolution: 1.3dppx) {
+    background-image: url("#{$image}");
+    background-size: $width + px $height + px;
+    //background-size: $width / 10 + rem $height / 10 + rem; // Use this if you've set HTML font size value to 62.5%
+    background-size: $width / 16 + rem $height / 16 + rem;
+  }
+}
+
+// Respond To
+// example: @include respond-to(handhelds) { width: 100% ;}
+@mixin respond-to($media) {
+  @if $media == handhelds {
+    @media only screen and (max-width: $small) { @content; }
+  }
+  @else if $media == medium-screens {
+    @media only screen and (min-width: $small + 1) and (max-width: $large - 1) { @content; }
+  }
+  @else if $media == wide-screens {
+    @media only screen and (min-width: $large) { @content; }
+  }
+}
+
+
+// ----------------------------------------------------------------------
+
+  // Styles
+
+// ----------------------------------------------------------------------
+
+// Box Shadow
+// example: @include box-shadow(1px, 2px, 2px, 2px, #000);
+@mixin box-shadow($hoff: false, $voff: false, $blur: false, $spread: false, $color: false){
+  box-shadow: $hoff $voff $blur $spread $color;
+}
+
+// Inner Shadow
+// example: @include inner-shadow(1px, 2px, 2px, #000);
+@mixin inner-shadow($hoff: false, $voff: false, $blur: false, $color: false) {
+  -webkit-box-shadow: inset $hoff $voff $blur $color;
+     -moz-box-shadow: inset $hoff $voff $blur $color;
+      box-shadow: inset $hoff $voff $blur $color;
+}
+
+// Opacity
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  $opacity-ie: $opacity * 100;
+  filter: alpha(opacity=$opacity-ie); //IE8
+}
+
+// Change placeholder text color
+// example: @include placeholder-color(#333);
+@mixin placeholder-color($color) {
+  &.placeholder {
+    color: $color
+  }
+
+  &:-moz-placeholder {
+    color: $color
+  }
+
+  &::-moz-placeholder {
+    color: $color
+  }
+
+  &::-webkit-input-placeholder {
+    color: $color
+  }
+
+  &:-ms-input-placeholder {
+    color: $color
+  }
+}
+
+// ----------------------------------------------------------------------
+// example: @include roundedCorners(10);
+@mixin roundedCorners($size) {
+  border-radius: $size + px;
+}
+
+// Rounded Corners Top Only
+@mixin roundedTop($size) {
+  border-radius: $size + px $size + px 0 0;
+}
+
+// Rounded Corner Top Left Only
+@mixin roundedTopLeft($size) {
+  border-radius: $size + px 0 0 0;
+}
+
+// Rounded Corner Top Right Only
+@mixin roundedTopRight($size) {
+  border-radius: 0 $size + px 0 0;
+}
+
+// Rounded Corners Bottom Only
+@mixin roundedBottom($size) {
+  border-radius: 0 0 $size + px $size + px;
+}
+
+// Rounded Corner Bottom Left Only
+@mixin roundedBottomLeft($size) {
+  border-radius: 0 0 0 $size + px;
+}
+
+// Rounded Corner Bottom Right Only
+@mixin roundedBottomRight($size) {
+  border-radius: 0 0 $size + px 0;
+}
+
+// Rounded Corners Left Only
+@mixin roundedLeft($size) {
+  border-radius: $size + px 0 0 $size + px;
+}
+
+// Rounded Corners Right Only
+@mixin roundedRight($size) {
+  border-radius: 0 $size + px $size + px 0;
+}
+
+// Text Shadow
+// example: @include single-text-shadow(1px, 2px, 2px, #000);
+@mixin single-text-shadow($hoff: false, $voff: false, $blur: false, $color: false) {
+  text-shadow: $hoff $voff $blur $color;
+}
