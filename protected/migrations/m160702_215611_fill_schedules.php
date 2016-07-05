@@ -122,6 +122,14 @@ class m160702_215611_fill_schedules extends DbMigration {
                         }',
                     'version'      => '1.0.1'
                 ]);
+             
+             $this->insert('schedules', [
+                    'hospitalId'   => '1', 
+                    'doctorId'     => '1',
+                    'isException'  => '1',
+                    'scheme'       => '{"2016-07-11":["09:00-10:00"]}',
+                    'version'      => '1.0.0'
+                ]); 
 
 	}
 
