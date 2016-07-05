@@ -237,26 +237,27 @@ class MainController extends BaseController {
                 
                     if (array_key_exists($day, $busy)) {
                   
-                            $arrayDiff = array_diff($timeList, $busy[$day]);
+                            $arrayBusyDiff = array_diff($timeList, $busy[$day]); 
 
                             if (!empty($arrayDiff)) {
-                                    $scheme[$day] = $arrayDiff;   
+                                    $scheme[$day] = $arrayBusyDiff;   
                             }
                             else {
                                 unset($scheme[$day]);
                             }
+                            
                     }
                     
                     if (array_key_exists($day, $schemeException)) {
                   
-                            $arrayDiff = array_diff($timeList, $schemeException[$day]);
-
-                            if (!empty($arrayDiff)) {
-                                    $scheme[$day] = $arrayDiff;   
+                            $arrayExcDiff = array_diff($arrayBusyDiff, $schemeException[$day]);
+                            
+                            if (!empty($arrayExcDiff)) {
+                                    $scheme[$day] = $arrayExcDiff;   
                             }
                     }
             }
-            
+
             unset($parser);
 
             $this->renderJson($scheme);
