@@ -233,6 +233,9 @@ class MainController extends BaseController {
             
             
             # Calc different 
+            $arrayBusyDiff  = [];
+            $arrayExcDiff   = [];
+            
             foreach  ($scheme as $day => $timeList) {
                 
                     if (array_key_exists($day, $busy)) {
@@ -259,6 +262,8 @@ class MainController extends BaseController {
             }
 
             unset($parser);
+            unset($arrayBusyDiff);
+            unset($arrayExcDiff);
 
             $this->renderJson($scheme);
 
