@@ -4,7 +4,7 @@
     {% set required = {'data-required': "true"} %}
 {% endif %}
 
-{% set htmlOptions = {placeholder: model.getAttributeLabel(field)}|merge(required?: {}) %}
+{% set htmlOptions = {'data-email': "true", placeholder: model.getAttributeLabel(field)}|merge(required ?: {}) %}
 
 {%if inVisible %}
     {% set visibleClass = 'in_visible' %}

@@ -255,7 +255,7 @@ $(function () {
         $(".stepsForm").stepsForm({
                 width: '100%',
                 active: 0,
-                errormsg: 'Заполните все поля',
+                errormsg: 'Заполните все поля корректно',
                 sendbtntext: 'Отправить',
                 posturl: '/',
                 theme: 'green',
