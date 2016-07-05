@@ -46,6 +46,11 @@ class ScheduleParser extends CComponent {
         private function WeekSequence($scheme) {
             
                 $schedule = json_decode($scheme, true);
+                
+                if (empty($schedule)) {
+                        return null;
+                }
+                
                 $dates = [];
                 
                 $start  =  strtotime($this->startDate);

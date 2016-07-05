@@ -164,10 +164,14 @@ class MainController extends BaseController {
                 
         }
         
+          /**
+	 * @param int $hospitalId
+         * @param int $doctorId
+	 */
         public function actionGetSchedule($hospitalId = null, $doctorId = null) {
             
 
-            $parser = new ScheduleParser("2016-07-10+30 days");
+            $parser = new ScheduleParser("2016-07-10+2 days");
  
             # GET Schedules
             $schedules = Schedules::model()->findByAttributes([
@@ -176,9 +180,10 @@ class MainController extends BaseController {
                 'active'    => 1
             ]);
             
+
             # Parse Schedules
             $scheme = $parser->getInnerFormat($schedules->scheme, $schedules->version);
-            
+
             # GET busy
             $criteria           = new CDbCriteria;
             
@@ -195,7 +200,7 @@ class MainController extends BaseController {
             $booking = Booking::model()
                         ->findAll($criteria);
 
-            $busy = [];
+            $busy = [];           
             
             foreach ($booking as $item) {
                     $key = $item['date'];
@@ -210,21 +215,28 @@ class MainController extends BaseController {
 
                     array_push($busy[$key], $value);
             }
-
+     
+            if ($scheme === null) {
+                    $this->renderJson(['error' => 1]);
+            }
+            
+            
             # Calc different 
             foreach  ($scheme as $day => $timeList) {
                 
                     if (array_key_exists($day, $busy)) {
-                        
+                  
                         $arrayDiff = array_diff($timeList, $busy[$day]);
                         
                         if (!empty($arrayDiff)) {
-                                $scheme[$day] = $arrayDiff;
+                                $scheme[$day] = $arrayDiff;   
+                        }
+                        else {
+                                unset($scheme[$day]);
                         }
 
                     }
             }
-
 
             $this->renderJson($scheme);
 
