@@ -89,5 +89,6 @@ return [
 	'params'         => [
 		'supportEmail'              => 'kovalit@mail.ru',
 		'languages'                 => require('_languages.php'),
+                'scheduleInterval'          => 36
 	],
 ];

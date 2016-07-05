@@ -170,19 +170,31 @@ class MainController extends BaseController {
 	 */
         public function actionGetSchedule($hospitalId = null, $doctorId = null) {
             
-
-            $parser = new ScheduleParser("2016-07-10+2 days");
+            $scheme             = [];
+            $schemeException    = [];
+            $busy               = [];    
+            
+            $interval = date('Y-m-d') . '+' . Yii::app()->params->itemAt('scheduleInterval') . ' days';
+            
+            $parser = new ScheduleParser($interval);
  
             # GET Schedules
-            $schedules = Schedules::model()->findByAttributes([
+            $schedules = Schedules::model()->findAllByAttributes([
                 'hospitalId'=> $hospitalId, 
                 'doctorId'  => $doctorId,
                 'active'    => 1
             ]);
-            
 
             # Parse Schedules
-            $scheme = $parser->getInnerFormat($schedules->scheme, $schedules->version);
+            foreach  ($schedules as $schedule) {
+                    if ((bool)$schedule->isException === false) {
+                            $scheme = $parser->getInnerFormat($schedule->scheme, $schedule->version); 
+                    }
+                    else {
+                            $schemeException = $parser->getInnerFormat($schedule->scheme, $schedule->version); 
+                    }
+            }
+            
 
             # GET busy
             $criteria           = new CDbCriteria;
@@ -200,8 +212,7 @@ class MainController extends BaseController {
             $booking = Booking::model()
                         ->findAll($criteria);
 
-            $busy = [];           
-            
+                   
             foreach ($booking as $item) {
                     $key = $item['date'];
 
@@ -226,17 +237,27 @@ class MainController extends BaseController {
                 
                     if (array_key_exists($day, $busy)) {
                   
-                        $arrayDiff = array_diff($timeList, $busy[$day]);
-                        
-                        if (!empty($arrayDiff)) {
-                                $scheme[$day] = $arrayDiff;   
-                        }
-                        else {
-                                unset($scheme[$day]);
-                        }
+                            $arrayDiff = array_diff($timeList, $busy[$day]);
 
+                            if (!empty($arrayDiff)) {
+                                    $scheme[$day] = $arrayDiff;   
+                            }
+                            else {
+                                unset($scheme[$day]);
+                            }
+                    }
+                    
+                    if (array_key_exists($day, $schemeException)) {
+                  
+                            $arrayDiff = array_diff($timeList, $schemeException[$day]);
+
+                            if (!empty($arrayDiff)) {
+                                    $scheme[$day] = $arrayDiff;   
+                            }
                     }
             }
+            
+            unset($parser);
 
             $this->renderJson($scheme);
 
