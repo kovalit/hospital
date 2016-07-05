@@ -8,19 +8,69 @@ $(function () {
                 date        : '#Booking_date',
                 time        : '#Booking_time'   
         };
-    
-    
-        var intervalsList = {};
+        
 
-
-        var selectDate = function() {
-
-                var timeList = $(fields.time);
-                var date = $(this).data("date");
+        var checkActualTime = function () {
+                var CurDate = new Date();
                 
-                // select date
+                var CurDateString = CurDate.getFullYear() + '-' +
+                        ('0' + (CurDate.getMonth()+1)).slice(-2) + '-' + 
+                        ('0' + CurDate.getDate()).slice(-2);
+                
+                for (var date in intervalsList) {
+                    
+                        if (CurDateString === date) {
+                                 var setectedDate = new Date(date);
+                                 
+                                 var futureTimeArr = [];
+
+                                 for (var key in intervalsList[date]) {
+
+                                        var interval = intervalsList[date][key];
+
+                                        var start = interval.split('-',2);
+                                        var time = start[0].split(':',2);
+
+                                        setectedDate.setHours(time[0]);
+                                        setectedDate.setMinutes(time[1]);
+
+                                        if (setectedDate.getTime() > CurDate.getTime()) {
+                                                futureTimeArr.push(intervalsList[date][key]);
+                                        }
+
+                                 }
+
+                                if (futureTimeArr.length > 0) {
+                                        intervalsList[date] = futureTimeArr;
+                                }
+                                else {
+                                        delete intervalsList[date];
+                                }
+
+                                break;
+                        }
+
+                };
+        };
+
+        
+        var intervalsList = {};
+        
+        
+        var selectDate = function selectDate(item) {
+            
+                if (intervalsList)
+        
+                var date = $(item).data("date");
+                var timeList = $(fields.time);
+                                
+                if (typeof intervalsList[date] === 'undefined') {
+                        return;
+                }
+
+                 // select date
                 $('.event').removeClass('event_select');
-                $(this).addClass('event_select');
+                $(item).addClass('event_select');
                 
                 // save date
                 $(fields.date).val(date);
@@ -28,13 +78,15 @@ $(function () {
                 // fill time list
                 timeList.empty();
                 timeList.append($("<option></option>").val('').html('Выберете время...'));
+                
                 $.each(intervalsList[date], function (key, value) {
                         if (key !== '') timeList.append($("<option></option>").val(value).html(value));
                 });
 
                 timeList.parents('.form-row').fadeIn();
-        }; 
-
+                
+                return true;
+        }
         
     
         var changeFileds = function(data, source) {
@@ -81,6 +133,7 @@ $(function () {
                         date.val('');
 
                         intervalsList = data;
+                        checkActualTime();
                         
                         // fill aviable date
                         for (var date in data) {
@@ -92,25 +145,43 @@ $(function () {
                         var calendar = $('<div></div');
                         calendar.attr('id', 'calendar');
                         $("#wrapper-calendar").append(calendar);
+                        
+                        for (var lastdate in intervalsList);
+                        
+                        var monthCount = diffMonths(lastdate);
+
 
                         // init calendat
                         calendar.zabuto_calendar({
                                 language: "ru",
+                                action: function () {
+                                    return selectDate(this);
+                                },
                                 show_previous: false,
                                 data: eventData,
-                                show_next: 2,
+                                show_next: monthCount,
                                 legend: [
                                         {type: "block", label: "Доступно для записи"}
                                 ]
                         });
-
-                        $("td.event").on('click', selectDate);
 
                         timeList.parents('.form-row').fadeOut();
                         
                         break;
                 };
         };
+        
+       
+        
+        function diffMonths(endDate) {
+                var diff;
+                var date1 = new Date();
+                var date2 = new Date(endDate);
+                diff = (date2.getFullYear() - date1.getFullYear()) * 12;
+                diff-= date1.getMonth();
+                diff+= date2.getMonth();
+                return diff <= 0 ? 0 : diff;
+        }
     
     
         // change specialize
