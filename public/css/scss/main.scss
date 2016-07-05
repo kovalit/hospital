@@ -1,4 +1,6 @@
 
+@import 'mixins';
+
 @import 'base/normalize';
 
 @import 'layout/container';
@@ -6,7 +8,5 @@
 @import 'vendors/glyphicon';
 @import 'vendors/steps-form';
 @import 'vendors/zabuto-calendar';
-
-@import 'utils/mixins';
 
 

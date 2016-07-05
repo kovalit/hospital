@@ -50,6 +50,9 @@ body {
     padding: 50px;
     border-radius: 3px;
     box-sizing: border-box;
+    @include breakpoint(480) { 
+        padding: 20px; 
+    }
 }
 .container-top {
     text-align: center;

@@ -116,6 +116,9 @@
 	border:none;
 	outline:none;
 	cursor:pointer;
+        text-decoration: none;
+        
+        
 }
 
 .stepsForm .sf-content {
@@ -465,6 +468,10 @@ box-shadow: 0px 0px 5px 0px rgba(29,134,74,1);
 }
 
 .sf-theme-green .sf-steps-navigation>button{
+	background:#27ae60;
+}
+
+.sf-theme-green a.sf-button {
 	background:#27ae60;
 }
 

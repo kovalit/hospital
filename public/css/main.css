@@ -466,6 +466,12 @@ body {
   box-sizing: border-box;
 }
 
+@media only screen and (max-width: 480px) {
+  .container {
+    padding: 20px;
+  }
+}
+
 .container-top {
   text-align: center;
   width: 100%;
@@ -1728,6 +1734,7 @@ body {
   border: none;
   outline: none;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .stepsForm .sf-content {
@@ -2132,6 +2139,10 @@ body {
 }
 
 .sf-theme-green .sf-steps-navigation > button {
+  background: #27ae60;
+}
+
+.sf-theme-green a.sf-button {
   background: #27ae60;
 }
 
