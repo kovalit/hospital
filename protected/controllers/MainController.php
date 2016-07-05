@@ -5,6 +5,7 @@ class MainController extends BaseController {
     
 	public function actionIndex() {
             
+            
                 $specialize     = Specialize::model()->getList();
                 $booking        = new Booking;
                 
@@ -165,7 +166,8 @@ class MainController extends BaseController {
         
         public function actionGetSchedule($hospitalId = null, $doctorId = null) {
             
-            $parser = new ScheduleParser();
+
+            $parser = new ScheduleParser("2016-07-10+30 days");
  
             # GET Schedules
             $schedules = Schedules::model()->findByAttributes([
@@ -210,8 +212,6 @@ class MainController extends BaseController {
             }
 
             # Calc different 
-            $result = [];
-            
             foreach  ($scheme as $day => $timeList) {
                 
                     if (array_key_exists($day, $busy)) {
@@ -219,17 +219,14 @@ class MainController extends BaseController {
                         $arrayDiff = array_diff($timeList, $busy[$day]);
                         
                         if (!empty($arrayDiff)) {
-                                $result[$day] = $arrayDiff;
+                                $scheme[$day] = $arrayDiff;
                         }
 
-                    }
-                    else {
-                        $result[$day] = $timeList;
                     }
             }
 
 
-            $this->renderJson($result);
+            $this->renderJson($scheme);
 
         }
 }
