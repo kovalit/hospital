@@ -58,16 +58,16 @@ class Booking extends ActiveRecord {
 	 */
 	public function attributeLabels() {
 		return array(
-			'id' => 'ID',
-			'doctorId' => 'Доктор',
-			'hospitalId' => 'Госпиталь',
-			'userId' => 'Пользователь',
-                        'date' => 'Дата',
-                        'start' => 'Начало',
-                        'end' => 'Конец',
-                        'name'=>'Имя',
-                        'phone'=>'Телефон',
-                        'email'=>'Электронная адрес'
+			'id'            => 'ID',
+			'doctorId'      => 'Доктор',
+			'hospitalId'    => 'Госпиталь',
+			'userId'        => 'Пользователь',
+                        'date'          => 'Дата',
+                        'start'         => 'Начало',
+                        'end'           => 'Конец',
+                        'name'          => 'Имя',
+                        'phone'         => 'Телефон',
+                        'email'         => 'Электронный адрес'
 		);
 	}
         
