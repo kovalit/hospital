@@ -5,7 +5,6 @@ class MainController extends BaseController {
     
 	public function actionIndex() {
             
-            
                 $specialize     = Specialize::model()->getList();
                 $booking        = new Booking;
                 
@@ -171,7 +170,7 @@ class MainController extends BaseController {
         public function actionGetSchedule($hospitalId = null, $doctorId = null) {
             
             $scheme             = [];
-            $schemeException    = [];
+            $exceptions         = [];
             $busy               = [];    
             
             $interval = date('Y-m-d') . '+' . Yii::app()->params->itemAt('scheduleInterval') . ' days';
@@ -191,7 +190,7 @@ class MainController extends BaseController {
                             $scheme = $parser->getInnerFormat($schedule->scheme, $schedule->version); 
                     }
                     else {
-                            $schemeException = $parser->getInnerFormat($schedule->scheme, $schedule->version); 
+                            $exceptions = $parser->getInnerFormat($schedule->scheme, $schedule->version); 
                     }
             }
             
@@ -232,38 +231,39 @@ class MainController extends BaseController {
             }
             
             
-            # Calc different 
-            $arrayBusyDiff  = [];
-            $arrayExcDiff   = [];
-            
-            foreach  ($scheme as $day => $timeList) {
-                
-                    if (array_key_exists($day, $busy)) {
-                  
-                            $arrayBusyDiff = array_diff($timeList, $busy[$day]); 
+            # Calc different    
+            foreach ($scheme as $date => $timeList) {
 
-                            if (!empty($arrayBusyDiff)) {
-                                    $scheme[$day] = $arrayBusyDiff;   
-                            }
-                            else {
-                                unset($scheme[$day]);
-                            }
-                            
+                    $merge = [];
+                    $isCrossing = false;
+                    
+                    if (array_key_exists($date, $busy)  ) {
+                            $merge = $busy[$date];    
+                            $isCrossing = true;
                     }
                     
-                    if (array_key_exists($day, $schemeException)) {
-                  
-                            $arrayExcDiff = array_diff($arrayBusyDiff, $schemeException[$day]);
-                            
-                            if (!empty($arrayExcDiff)) {
-                                    $scheme[$day] = $arrayExcDiff;   
-                            }
+                    if (array_key_exists($date, $exceptions)  ) {
+                       
+                            $merge = array_merge_recursive($merge, $exceptions[$date]);
+                            $merge = array_unique($merge);
+                            $isCrossing = true;
                     }
+                    
+                    if($isCrossing) {
+                           
+                            $scheme[$date] = array_diff($timeList, $merge);
+
+                            if (count($scheme[$date]) === 0) {
+                                    unset($scheme[$date]);
+                            }
+                   
+                    }
+                    
             }
+            
 
             unset($parser);
-            unset($arrayBusyDiff);
-            unset($arrayExcDiff);
+            unset($merge);
 
             $this->renderJson($scheme);
 
